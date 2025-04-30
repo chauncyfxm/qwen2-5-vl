@@ -1,0 +1,19 @@
+{
+    "python.defaultInterpreterPath": "C:\\Users\\chauncyfxm\\Desktop\\new_venv\\Scripts\\python.exe",
+    "python.terminal.activateEnvironment": true,
+
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "args": [
+                "-NoExit",
+                "-Command",
+                "& 'new_venv\\Scripts\\Activate'"
+            ]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "editor.fontSize": 16,
+
+
+}
