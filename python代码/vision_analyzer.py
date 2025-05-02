@@ -15,7 +15,10 @@ def init_models():
         attn_implementation="flash_attention_2",
         device_map="auto",
     )
-    processor = AutoProcessor.from_pretrained(model_dir)
+
+    processor = AutoProcessor.from_pretrained(
+        model_dir
+    )
     return model, processor
 
 def realtime_analysis(img_base64,processor , model):
@@ -26,12 +29,20 @@ def realtime_analysis(img_base64,processor , model):
     messages = [{
         "role": "user",
         "content": [
-            {"type": "image", "image": "data:image/jpeg;base64," + img_base64},
-            {"type": "text", "text": "请以JSON格式输出图像分析结果，找出所有带血条的单位,要求包含以下字段：\n1. 血条颜色（中文）\n2. 坐标位置（x1,y1,x2,y2格式）\n3. 置信度（0-1）\n确保不使用转义字符，直接输出可解析的JSON。例如：[{\"血条颜色\": \"红\", \"坐标位置\": \"10,10,20,20\", \"置信度\": 0.9}]"}
+            {"type": "image", 
+            "image": "data:image/jpeg;base64," + img_base64,
+            "resized_height": 1080/8,
+            "resized_width": 1920/8
+            },
+            {"type": "text", "text": "找出(所有的)带血条的单位,单位的位置,整个图片大小也显示出来,要求包含以下字段：\n1. 血条颜色（中文）\n2. 坐标位置[x1,y1,x2,y2]\n3. 图片大小\n。例如：[{\"血条颜色\": \"红\", \"坐标位置\": [10,10,20,20], \"图片大小\": [1920,1080]}]"}
         ]
     }]
     image_inputs, video_inputs = process_vision_info(messages)
-    text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    text = processor.apply_chat_template(
+        messages, 
+        tokenize=False,
+        add_generation_prompt=True
+        )
     inputs = processor(
         text=[text],
         images=image_inputs,
@@ -48,13 +59,15 @@ def realtime_analysis(img_base64,processor , model):
 
 
 if __name__ == "__main__":
+    print("开始: ")
     #测试一下功能
     model,prossesor = init_models()
 
     import base64
     try:
-        with open('test.jpg', 'rb') as f:
+        with open('C:\\Users\\chauncyfxm\\Desktop\\Qwen2.5-VL\\python代码\\test.jpg', 'rb') as f:
             jpg_data = f.read()
+        print("文件读取成功")
         img_base64 = base64.b64encode(jpg_data).decode()
     except FileNotFoundError:
         print("文件未找到，请检查文件路径。")

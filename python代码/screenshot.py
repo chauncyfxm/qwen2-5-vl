@@ -79,11 +79,11 @@ def get_jpg_data(window_title):
         # 原有截图代码保持不变
         #window_title = input("请输入要截取的窗口标题: ")
 
-        screenshot = capture_window(window_title)
+        PIL_screenshot = capture_window(window_title)
         
         # 转换为字节流
         img_byte_arr = io.BytesIO()
-        screenshot.save(img_byte_arr, format='JPEG')
+        PIL_screenshot.save(img_byte_arr, format='JPEG')
         jpg_data = img_byte_arr.getvalue()
 
         return jpg_data
@@ -101,10 +101,14 @@ def get_jpg_data(window_title):
 
 # 调试用保存（正式使用可注释）
 if __name__ == "__main__":
-
-    jpg_data = get_jpg_data()
+    all_window_title = get_all_window_titles()
+    print(all_window_title)
+    input_window_title = input("请输入要截取的窗口标题: ")
+    jpg_data = get_jpg_data(input_window_title)
     script_dir = os.path.dirname(os.path.abspath(__file__))
     save_path = os.path.join(script_dir, 'test.jpg')
     with open(save_path, 'wb') as f:
         f.write(jpg_data)
     print(f"调试文件已保存至: {save_path}")
+    import base64
+    img_base64 = base64.b64encode(jpg_data).decode()
