@@ -19,7 +19,7 @@ def analyze_image(processor, model,jpg_data):
     return analysis_result
 
 
-#111
+#111333333我问问
 # 初始化模型
 model, processor = init_models()
 
